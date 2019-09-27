@@ -5,8 +5,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.woollen.order.entry.OrderInfo;
 import com.woollen.order.mapper.OrderInfoMapper;
+import com.woollen.order.request.OrderForm;
 import com.woollen.order.service.OrderInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,10 +24,15 @@ import java.util.List;
 public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
+    @Autowired
     private OrderInfoMapper orderInfoMapper;
 
     @Override
-    public Integer saveOrderInfo(OrderInfo orderInfo) {
+    public OrderInfo saveOrderInfo(OrderForm form) {
+        OrderInfo orderInfo = new OrderInfo();
+        int insert = orderInfoMapper.insert(orderInfo);
         return null;
     }
 

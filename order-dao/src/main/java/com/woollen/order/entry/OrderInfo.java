@@ -3,7 +3,6 @@ package com.woollen.order.entry;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,17 +26,35 @@ public class OrderInfo extends Model<OrderInfo> {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * 订单号
+     */
     private String seq;
 
+    /**
+     * 姓名
+     */
     private String name;
 
+    /**
+     * 手机号
+     */
     private String phone;
 
     /**
      * 广告来源
      */
-    @TableField("adtSource")
     private String adtSource;
+
+    /**
+     * 单位分
+     */
+    private Long orderFee;
+
+    /**
+     * 支付渠道
+     */
+    private Integer payChannel;
 
     /**
      * 创建时间

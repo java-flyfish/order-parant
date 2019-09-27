@@ -28,8 +28,8 @@ public class OrderController extends BaseController {
 
     @PostMapping("createdOrder")
     public Result createOrder(OrderForm form){
-        PageInfo pageInfo = orderInfoService.selectOrderInfo(new OrderInfo());
-        return success(pageInfo);
+        OrderInfo integer = orderInfoService.saveOrderInfo(form);
+        return success(integer);
     }
 
     @GetMapping("hello")

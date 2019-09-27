@@ -8,7 +8,9 @@
         <result column="seq" property="seq" />
         <result column="name" property="name" />
         <result column="phone" property="phone" />
-        <result column="adtSource" property="adtSource" />
+        <result column="adt_source" property="adtSource" />
+        <result column="order_fee" property="orderFee" />
+        <result column="pay_channel" property="payChannel" />
         <result column="created" property="created" />
         <result column="updated" property="updated" />
     </resultMap>

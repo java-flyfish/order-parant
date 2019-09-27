@@ -2,6 +2,7 @@ package com.woollen.order.service;
 
 import com.github.pagehelper.PageInfo;
 import com.woollen.order.entry.OrderInfo;
+import com.woollen.order.request.OrderForm;
 
 /**
  * @Info:
@@ -11,6 +12,6 @@ import com.woollen.order.entry.OrderInfo;
  * @Version: V1.0
  **/
 public interface OrderInfoService {
-    Integer saveOrderInfo(OrderInfo orderInfo);
+    OrderInfo saveOrderInfo(OrderForm form);
     PageInfo selectOrderInfo(OrderInfo orderInfo);
 }
