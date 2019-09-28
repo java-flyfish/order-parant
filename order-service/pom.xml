@@ -45,5 +45,5 @@
 			<artifactId>jedis</artifactId>
 			<version>${jedis.version}</version>
 		</dependency>
-	</dependencies>
+    </dependencies>
 </project>

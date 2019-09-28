@@ -42,6 +42,11 @@ public class OrderInfo extends Model<OrderInfo> {
     private String phone;
 
     /**
+     * 1:待付款，2:已付款，3:申请退款，4:退款审核中，5:退款完成，6:退款失败，9:订单过期
+     */
+    private Integer status;
+
+    /**
      * 广告来源
      */
     private String adtSource;

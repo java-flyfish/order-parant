@@ -1,16 +1,20 @@
 package com.woollen.order.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.woollen.order.base.BaseController;
 import com.woollen.order.entry.OrderInfo;
-import com.woollen.order.request.OrderForm;
+import com.woollen.order.exception.OCException;
+import com.woollen.order.request.CreateOrderForm;
+import com.woollen.order.request.PayOrderForm;
 import com.woollen.order.response.Result;
 import com.woollen.order.service.OrderInfoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * @Info:
@@ -27,13 +31,33 @@ public class OrderController extends BaseController {
     private OrderInfoService orderInfoService;
 
     @PostMapping("createdOrder")
-    public Result createOrder(OrderForm form){
-        OrderInfo integer = orderInfoService.saveOrderInfo(form);
+    public Result createOrder(@Valid CreateOrderForm form,BindingResult result){
+        if(result.hasErrors()){
+            for (ObjectError error : result.getAllErrors()) {
+                throw new OCException(error.getDefaultMessage());
+            }
+        }
+        OrderInfo orderInfo = new OrderInfo();
+        BeanUtils.copyProperties(form,orderInfo);
+        OrderInfo integer = orderInfoService.createOrderInfo(orderInfo,form.getSmsCode());
         return success(integer);
     }
 
-    @GetMapping("hello")
-    public String hello(){
-        return "hello";
+    @PostMapping("payOrder")
+    public Result payOrder(@Valid PayOrderForm form, BindingResult result){
+        if(result.hasErrors()){
+            for (ObjectError error : result.getAllErrors()) {
+                throw new OCException(error.getDefaultMessage());
+            }
+        }
+        Map<String,String> resultMap = orderInfoService.payOrder(form.getSeq());
+        return success(resultMap);
+    }
+
+
+    @GetMapping("smsCode")
+    public Result smsCode(String phone){
+        orderInfoService.sendSmsCode(phone);
+        return success(true);
     }
 }

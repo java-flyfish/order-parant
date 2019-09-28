@@ -2,7 +2,8 @@ package com.woollen.order.service;
 
 import com.github.pagehelper.PageInfo;
 import com.woollen.order.entry.OrderInfo;
-import com.woollen.order.request.OrderForm;
+
+import java.util.Map;
 
 /**
  * @Info:
@@ -12,6 +13,10 @@ import com.woollen.order.request.OrderForm;
  * @Version: V1.0
  **/
 public interface OrderInfoService {
-    OrderInfo saveOrderInfo(OrderForm form);
+    OrderInfo createOrderInfo(OrderInfo form,String smsCode);
     PageInfo selectOrderInfo(OrderInfo orderInfo);
+
+    Map<String,String> payOrder(String seq);
+
+    void sendSmsCode(String phone);
 }
