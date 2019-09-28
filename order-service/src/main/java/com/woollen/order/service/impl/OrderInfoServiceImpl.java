@@ -1,18 +1,23 @@
 package com.woollen.order.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.woollen.order.entry.OrderInfo;
+import com.woollen.order.entry.PayOrder;
 import com.woollen.order.enums.EnumOrderStatusType;
 import com.woollen.order.exception.OCException;
 import com.woollen.order.mapper.OrderInfoMapper;
+import com.woollen.order.mapper.PayOrderMapper;
+import com.woollen.order.mq.RocketMQService;
 import com.woollen.order.service.OrderInfoService;
 import com.woollen.order.utils.RedisUtils;
 import com.woollen.order.utils.SeqUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -38,6 +43,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
     private OrderInfoMapper orderInfoMapper;
+
+    @Autowired
+    private PayOrderMapper payOrderMapper;
+
+    @Autowired
+    private RocketMQService rocketMQService;
 
     @Override
     public OrderInfo createOrderInfo(OrderInfo form,String smsCode) {
@@ -73,7 +84,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public Map<String, String> payOrder(String seq) {
-        //todo 对接微信支付，生成支付信息
 
         return null;
     }
@@ -99,6 +109,39 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         if (!smsCode.equals(code)){
             throw new OCException("验证码不正确！");
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean payCallback(String seq,String outSeq){
+        Long now = System.currentTimeMillis();
+        //todo 对接微信支付，生成支付信息,这里先直接生成支付成功订单
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("seq",seq);
+        OrderInfo orderInfo = orderInfoMapper.selectOne(wrapper);
+        if (orderInfo == null){
+            throw new OCException("订单不存在！");
+        }
+
+        orderInfo.setPayFee(orderInfo.getOrderFee());
+        orderInfo.setOutSeq(outSeq);
+        orderInfo.setStatus(EnumOrderStatusType.PAY_UP.getValue());
+        orderInfo.setPayChannel(1);//微信支付渠道
+        orderInfo.setUpdated(now);
+        orderInfoMapper.updateById(orderInfo);
+
+        PayOrder payOrder = new PayOrder();
+        BeanUtils.copyProperties(orderInfo,payOrder);
+        payOrder.setPayTime(now);
+        payOrder.setCreated(now);
+        payOrder.setUpdated(now);
+        payOrderMapper.insert(payOrder);
+        //发送mq通知用户中心生成用户信息
+        try {
+            rocketMQService.send(JSONObject.toJSONString(orderInfo));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return true;
     }

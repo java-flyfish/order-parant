@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class OrderInfo extends Model<OrderInfo> {
+public class RefundOrder extends Model<RefundOrder> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,29 +37,19 @@ public class OrderInfo extends Model<OrderInfo> {
     private String outSeq;
 
     /**
-     * 姓名
+     * 第三方交易单号
      */
-    private String name;
+    private String refundSeq;
 
     /**
-     * 手机号
-     */
-    private String phone;
-
-    /**
-     * 1:待付款，2:已付款，3:申请退款，4:退款审核中，5:退款完成，6:退款失败，9:订单过期
+     * 3:申请退款，4:退款审核中，5:退款完成，6:退款失败
      */
     private Integer status;
 
     /**
-     * 广告来源
+     * 退款金额，单位分
      */
-    private String adtSource;
-
-    /**
-     * 单位分
-     */
-    private Long orderFee;
+    private Long refundFee;
 
     /**
      * 实际支付金额，单位分
@@ -72,7 +62,12 @@ public class OrderInfo extends Model<OrderInfo> {
     private Integer payChannel;
 
     /**
-     * 创建时间
+     * 退款完成时间
+     */
+    private Long refundTime;
+
+    /**
+     * 创建时间，即申请退款实际
      */
     private Long created;
 

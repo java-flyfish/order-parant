@@ -1,6 +1,6 @@
 package com.woollen.order.mapper;
 
-import com.woollen.order.entry.OrderInfo;
+import com.woollen.order.entry.PayOrder;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author weiyang
  * @since 2019-09-28
  */
-public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
+public interface PayOrderMapper extends BaseMapper<PayOrder> {
 
 }

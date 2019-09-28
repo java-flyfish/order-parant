@@ -19,4 +19,6 @@ public interface OrderInfoService {
     Map<String,String> payOrder(String seq);
 
     void sendSmsCode(String phone);
+
+    Boolean payCallback(String seq,String outSeq);
 }
