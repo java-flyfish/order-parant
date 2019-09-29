@@ -57,7 +57,9 @@ public class RocketMQService {
         defaultMQProducer.setNamesrvAddr(namesrvAddr);
         defaultMQProducer.start();
         logger.info("MQ生产者启动成功。。。。");
-        defaultMQPushConsumer = new DefaultMQPushConsumer(consumerName);
+
+        //消费者配置
+        /*defaultMQPushConsumer = new DefaultMQPushConsumer(consumerName);
         defaultMQPushConsumer.setNamesrvAddr(namesrvAddr);
         defaultMQPushConsumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         //设置consumer所订阅的Topic和Tag，*代表全部的Tag
@@ -84,6 +86,6 @@ public class RocketMQService {
         });
         //调用start()方法启动consumer
         defaultMQPushConsumer.start();
-        logger.info("MQ消费者启动成功。。。。");
+        logger.info("MQ消费者启动成功。。。。");*/
     }
 }

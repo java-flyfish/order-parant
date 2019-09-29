@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -139,7 +140,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         payOrderMapper.insert(payOrder);
         //发送mq通知用户中心生成用户信息
         try {
-            rocketMQService.send(JSONObject.toJSONString(orderInfo));
+            Map<String,Object> paramMap = new HashMap<>();
+            paramMap.put("phone",orderInfo.getPhone());
+            paramMap.put("name",orderInfo.getName());
+            rocketMQService.send(JSONObject.toJSONString(paramMap));
         } catch (Exception e) {
             e.printStackTrace();
         }
