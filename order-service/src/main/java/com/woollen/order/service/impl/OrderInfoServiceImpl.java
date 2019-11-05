@@ -132,7 +132,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfo.setUpdated(now);
         orderInfoMapper.updateById(orderInfo);
 
-        PayOrder payOrder = new PayOrder();
+        QueryWrapper<PayOrder> payOrderQueryWrapper = new QueryWrapper<>();
+        payOrderQueryWrapper.eq("seq",seq);
+        PayOrder payOrder = payOrderMapper.selectOne(payOrderQueryWrapper);
+        if (payOrder != null){
+            logger.info("支付订单以存在，单号：{},外部单号：{}",seq,outSeq);
+            return true;
+        }
+        payOrder = new PayOrder();
         BeanUtils.copyProperties(orderInfo,payOrder);
         payOrder.setPayTime(now);
         payOrder.setCreated(now);

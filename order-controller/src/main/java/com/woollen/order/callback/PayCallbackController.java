@@ -21,9 +21,9 @@ public class PayCallbackController extends BaseController {
     private OrderInfoService orderInfoService;
 
     @RequestMapping("weixin")
-    public String weixinCallback(){
+    public String weixinCallback(String orderNum,String outSeq){
 
-        Boolean b = orderInfoService.payCallback("WOO201909281014220001", "213445674343457654");
+        Boolean b = orderInfoService.payCallback(orderNum, outSeq);
         return "true";
 
     }
