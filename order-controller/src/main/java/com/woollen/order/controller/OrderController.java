@@ -27,7 +27,6 @@ import java.util.Map;
  * @Version: V1.0
  **/
 @ApiModel(reference = "order")
-@BridgeGroup("orderCreategroup")
 @RestController
 @RequestMapping("order")
 public class OrderController extends BaseController {

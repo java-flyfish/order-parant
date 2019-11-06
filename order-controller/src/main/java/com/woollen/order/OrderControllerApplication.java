@@ -7,7 +7,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @MapperScan("com.woollen.order.mapper")
-@EnableSwagger2
 public class OrderControllerApplication {
 
 	public static void main(String[] args) {
